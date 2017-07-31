@@ -1,3 +1,7 @@
+# 申明 #
+> 本工程直接使用lin-xin童鞋已经搭建好的工程，用于开发自己实际的后台系统，在此感谢lin-xin。
+> 下面还是会把lin-xin写的说明文档发布一下，以便更好使用。
+> 
 # manage-system #
 基于Vue.js 2.x系列 + Element UI 的后台管理系统解决方案。[线上地址](http://work.omwteam.com/)
 
