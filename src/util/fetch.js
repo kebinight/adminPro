@@ -3,6 +3,7 @@
  * Created by kebin on 2017/7/31.
  */
 import axios from 'axios';
+import router from '../router/index';
 import { Message } from 'element-ui';
 
 const service = axios.create({
@@ -49,6 +50,7 @@ service.interceptors.response.use(response => {
                 message: '请先登录',
                 type: 'warning'
             });
+            router.replace({ path: '/login' });
             break;
         default :
             Message({

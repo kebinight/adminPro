@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { Message } from 'element-ui';
 
 Vue.use(Router);
 let router = new Router({
@@ -64,7 +65,12 @@ router.beforeEach((to, from, next) => {
         if(localStorage.getItem('isLogin')) {
             next();
         } else {
-            alert('请先登录！');
+            console.log(from.path + '|' + to.path);
+            Message({
+                showClose: true,
+                message: '请先登录',
+                type: 'warning'
+            });
             next({ path: '/login' });
         }
     }
