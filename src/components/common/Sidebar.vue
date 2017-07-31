@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 export default {
     data() {
         return {
@@ -28,15 +27,14 @@ export default {
         }
     },
     created () {
-        var url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
-        var obj = this;
-        axios.post(url).then(function(response) {
-            var res = response.data;
+        let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
+        let obj = this;
+        this.$fetch.post(url).then(function(response) {
+            /*let res = response.data;
             if(res.status) {
                 obj.items = res.data;
-            }
+            }*/
         }).catch(function(response) {
-            console.log(response);
         });
     },
     computed:{

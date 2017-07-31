@@ -8,7 +8,8 @@
                     {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="loginout">退出</el-dropdown-item>
+                    <el-dropdown-item command="update-info">个人信息</el-dropdown-item>
+                    <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -33,6 +34,8 @@
                     localStorage.removeItem('ms_username');
                     localStorage.removeItem('isLogin');
                     this.$router.push('/login');
+                } else if(command == 'update-info') {
+                    alert('点击了修改个人资料');
                 }
             }
         }
