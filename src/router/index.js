@@ -4,6 +4,7 @@ import { Message } from 'element-ui';
 
 Vue.use(Router);
 let router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -65,7 +66,6 @@ router.beforeEach((to, from, next) => {
         if(localStorage.getItem('isLogin')) {
             next();
         } else {
-            console.log(from.path + '|' + to.path);
             Message({
                 showClose: true,
                 message: '请先登录',
