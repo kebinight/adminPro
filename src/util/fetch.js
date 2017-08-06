@@ -28,11 +28,13 @@ service.interceptors.response.use(response => {
     let data = response.data;
     switch (data.code) {
         case 200 :
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: 'success'
-            });
+            if(data.msg) {
+                Message({
+                    showClose: true,
+                    message: data.msg,
+                    type: 'success'
+                });
+            }
             break;
         case 201 :  //注册步骤未完成
         case 202 :  //账号被限制登录

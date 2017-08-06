@@ -34,13 +34,13 @@ export default {
             let res = response.data;
             if(res.status) {
                 let data = res.data;
-                console.log(data.menu);
                 obj.items = data.menu;
             }
         }).catch(function(response) {
         });
     },
     computed:{
+        //返回当前活动的菜单项名
         onRoutes(){
             return this.$route.path.replace('/', '');
         }
