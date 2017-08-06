@@ -27,13 +27,16 @@ export default {
         }
     },
     created () {
-        let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
+        let url = 'http://pro-admin.cn/home/getMenu';
+        //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
         let obj = this;
         this.$fetch.post(url).then(function(response) {
-            /*let res = response.data;
+            let res = response.data;
             if(res.status) {
-                obj.items = res.data;
-            }*/
+                let data = res.data;
+                console.log(data.menu);
+                obj.items = data.menu;
+            }
         }).catch(function(response) {
         });
     },
