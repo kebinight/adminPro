@@ -11,8 +11,7 @@ const service = axios.create({
     timeout: 15000,
     header: {
         'contentType': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'User-Agent' : 'smartlemon',
-        'responseType': 'json'
+        'User-Agent' : 'smartlemon' 
     }
 });
 
