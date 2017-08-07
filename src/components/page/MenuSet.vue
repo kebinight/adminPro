@@ -2,28 +2,40 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-menu"></i> 表格</el-breadcrumb-item>
-                <el-breadcrumb-item>基础表格</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-menu"></i> 基础设置</el-breadcrumb-item>
+                <el-breadcrumb-item>菜单管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="handle-box">
-            <el-button type="primary" icon="delete" class="handle-del mr10" @click="delAll">批量删除</el-button>
             <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
                 <el-option key="1" label="广东省" value="广东省"></el-option>
                 <el-option key="2" label="湖南省" value="湖南省"></el-option>
             </el-select>
             <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
+            <el-button type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
+            <el-button type="danger" icon="delete" class="handle-del mr10" @click="">批量删除</el-button>
         </div>
-        <el-table :data="data" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+        <el-table :data="data" border style="width: 100%" ref="menuTable"
+            @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="date" label="日期" sortable width="150">
+            <el-table-column prop="name" label="菜单名称" width="150">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120">
+            <el-table-column prop="node" label="对应动作" width="220">
             </el-table-column>
-            <el-table-column prop="address" label="地址" :formatter="formatter">
+            <el-table-column prop="class" label="样式" width="100">
             </el-table-column>
-            <el-table-column label="操作" width="180">
+            <el-table-column prop="rank" label="排序权重" width="100">
+            </el-table-column>
+            <el-table-column prop="status" label="状态" width="100">
+            </el-table-column>
+            <el-table-column prop="admin.name" label="操作员" width="150">
+            </el-table-column>
+            <el-table-column prop="create_time" label="创建时间" width="150">
+            </el-table-column>
+            <el-table-column prop="update_time" label="更新时间" width="150">
+            </el-table-column>
+            <el-table-column label="操作">
                 <template scope="scope">
                     <el-button size="small"
                             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -46,7 +58,7 @@
     export default {
         data() {
             return {
-                url: './static/vuetable.json',
+                dataUrl: '/menu/index',
                 tableData: [],
                 cur_page: 1,
                 multipleSelection: [],
@@ -63,7 +75,7 @@
             data(){
                 const self = this;
                 return self.tableData.filter(function(d){
-                    let is_del = false;
+                    /*let is_del = false;
                     for (let i = 0; i < self.del_list.length; i++) {
                         if(d.name === self.del_list[i].name){
                             is_del = true;
@@ -77,26 +89,36 @@
                         ){
                             return d;
                         }
-                    }
+                    }*/
+                    return d;
                 })
             }
         },
         methods: {
             handleCurrentChange(val){
-                this.cur_page = val;
-                this.getData();
+                //this.cur_page = val;
+                //this.getData();
             },
             getData(){
                 let self = this;
-                if(process.env.NODE_ENV === 'development'){
-                    self.url = '/ms/table/list';
-                };
-                self.$axios.post(self.url, {page:self.cur_page}).then((res) => {
-                    self.tableData = res.data.list;
-                })
+                let url = this.dataUrl;
+                this.$fetch.post(url, {
+                    page: '1'
+                }).then(function(response) {
+                    let res = response.data;
+                    if(res.status) {
+                        let data = res.data;
+                        console.log(data.menu);
+                        self.tableData = data.menu;
+                    }
+                }).catch(function(response) {
+                });
+            },
+            add() {
+                
             },
             search(){
-                this.is_search = true;
+                //this.is_search = true;
             },
             formatter(row, column) {
                 return row.address;
@@ -105,13 +127,13 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                this.$message('编辑第'+(index+1)+'行');
+                //this.$message('编辑第'+(index+1)+'行');
             },
             handleDelete(index, row) {
-                this.$message.error('删除第'+(index+1)+'行');
+                //this.$message.error('删除第'+(index+1)+'行');
             },
             delAll(){
-                const self = this,
+                /*const self = this,
                     length = self.multipleSelection.length;
                 let str = '';
                 self.del_list = self.del_list.concat(self.multipleSelection);
@@ -119,10 +141,10 @@
                     str += self.multipleSelection[i].name + ' ';
                 }
                 self.$message.error('删除了'+str);
-                self.multipleSelection = [];
+                self.multipleSelection = [];*/
             },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                //this.multipleSelection = val;
             }
         }
     }

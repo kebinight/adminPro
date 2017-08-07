@@ -3,15 +3,16 @@
         <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router>
             <template v-for="item in items">
                 <template v-if="item.subs">
-                    <el-submenu :index="item.index">
-                        <template slot="title"><i :class="item.icon"></i>{{ item.title }}</template>
-                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">{{ subItem.title }}
+                    <el-submenu :index="item.node">
+                        <template slot="title"><i :class="item.class"></i>{{ item.name }}</template>
+                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.node">
+                        {{ subItem.name }}
                         </el-menu-item>
                     </el-submenu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.index">
-                        <i :class="item.icon"></i>{{ item.title }}
+                    <el-menu-item :index="item.node">
+                        <i :class="item.class"></i>{{ item.name }}
                     </el-menu-item>
                 </template>
             </template>
@@ -27,7 +28,7 @@ export default {
         }
     },
     created () {
-        let url = 'http://pro-admin.cn/home/getMenu';
+        let url = 'http://pro-admin.cn/menu/getMenu';
         //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
         let obj = this;
         this.$fetch.post(url).then(function(response) {

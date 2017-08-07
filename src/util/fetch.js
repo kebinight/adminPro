@@ -7,10 +7,11 @@ import router from '../router/index';
 import { Message } from 'element-ui';
 
 const service = axios.create({
-    baseURL: '',
+    baseURL: (process.env.NODE_ENV === 'development') ? 'http://pro-admin.cn' : 'http://pro-admin.cn',
     timeout: 15000,
     header: {
         'contentType': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*',
         'User-Agent' : 'smartlemon' 
     }
 });
