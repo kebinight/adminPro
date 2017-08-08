@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-menu"></i> 账号管理</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-menu"></i> 系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item>权限管理</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -42,7 +42,7 @@
             </el-table-column>
             <el-table-column
                 label="权限动作"
-                width="380">
+                width="300">
                 <template scope="scope">
                     <el-tag
                         v-for="action in scope.row.children"
@@ -104,7 +104,7 @@
                 curentOpeLimitIndex: null,  //当前正在操作的权限项
                 actionItem: {
                     name: '',
-                    parent_id: '',
+                    parent_id: 0,
                     node: '',
                     rank: 0,
                     status: 1,
@@ -166,10 +166,14 @@
                             let res = response.data;
                             if(res.status) {
                                 self.dialogFormVisible = false;
-                                console.log(self.limitData[self.curentOpeLimitIndex].children);
-                                console.log(res.data.action);
                                 self.limitData[self.curentOpeLimitIndex].children.push(res.data.action);
-                                console.log(self.limitData[self.curentOpeLimitIndex].children);
+
+                                self.actionItem.name = '';
+                                self.actionItem.parent_id = '';
+                                self.actionItem.node = '';
+                                self.actionItem.rank = 0;
+                                self.actionItem.status = 1;
+                                self.actionItem.remark = '';
                             }
                         }).catch(function(response) {
                         });

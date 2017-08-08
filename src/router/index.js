@@ -43,6 +43,32 @@ let router = new Router({
                 {
                     path: '/limit-edit',   //编辑权限
                     component: resolve => require(['../components/page/limit/LimitSave.vue'], resolve)
+                },
+                //角色管理---------------------------------------------------------------------------------
+                {
+                    path: '/role-index',   //角色管理
+                    component: resolve => require(['../components/page/role/RoleIndex.vue'], resolve)
+                },
+                {
+                    path: '/role-add',   //添加角色
+                    component: resolve => require(['../components/page/role/RoleSave.vue'], resolve)
+                },
+                {
+                    path: '/role-edit',   //编辑角色
+                    component: resolve => require(['../components/page/role/RoleSave.vue'], resolve)
+                },
+                //账号管理---------------------------------------------------------------------------------
+                {
+                    path: '/user-index',   //账号管理
+                    component: resolve => require(['../components/page/user/UserIndex.vue'], resolve)
+                },
+                {
+                    path: '/user-add',   //添加账号
+                    component: resolve => require(['../components/page/user/UserSave.vue'], resolve)
+                },
+                {
+                    path: '/user-edit',   //编辑账号
+                    component: resolve => require(['../components/page/user/UserSave.vue'], resolve)
                 }
             ]
         },

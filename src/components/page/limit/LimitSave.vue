@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-menu"></i> 账号管理</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-menu"></i> 系统设置</el-breadcrumb-item>
                 <el-breadcrumb-item to="/limit-index" ><i class="el-icon-menu"></i> 权限管理</el-breadcrumb-item>
                 <el-breadcrumb-item>{{ pageTitle }}</el-breadcrumb-item>
             </el-breadcrumb>
@@ -56,7 +56,7 @@
                 postUrl: '/slimit/save',
                 limitData: {
                     name: '',
-                    pid: 0,
+                    parent_id: 0,
                     class: '',
                     node: '',
                     rank: 0,
@@ -75,6 +75,7 @@
         },
         methods: {
             submit(formName) {
+                let self = this;
                 let url = this.postUrl;
                 let formData = this.limitData;
                 this.$refs[formName].validate((valid) => {
@@ -82,8 +83,10 @@
                         this.$fetch.post(url, formData).then(function(response) {
                             let res = response.data;
                             if(res.status) {
+                                self.$router.push({ path: '/limit-index' });
                             }
                         }).catch(function(response) {
+                            //do something
                         });
                     } else {
                         console.log('error submit!!');
