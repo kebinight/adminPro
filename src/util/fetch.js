@@ -30,11 +30,19 @@ service.interceptors.response.use(response => {
     switch (data.code) {
         case 200 :
             if(data.msg) {
-                Message({
-                    showClose: true,
-                    message: data.msg,
-                    type: 'success'
-                });
+                if(data.status) {
+                    Message({
+                        showClose: true,
+                        message: data.msg,
+                        type: 'success'
+                    });
+                } else {
+                    Message({
+                        showClose: true,
+                        message: data.msg,
+                        type: 'error'
+                    });
+                }
             }
             break;
         case 201 :  //注册步骤未完成
