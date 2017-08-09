@@ -114,8 +114,8 @@
                     if (valid) {
                         this.$fetch.post(url, formData).then(function(response) {
                             let res = response.data;
-                            alert(res.msg);
                             if(res.status) {
+                                self.$router.push({ path: '/menu-index' });
                             }
                         }).catch(function(response) {
                         });

@@ -21,19 +21,17 @@
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="name" label="菜单名称" width="150">
             </el-table-column>
-            <el-table-column prop="node" label="路由标志" width="160">
-            </el-table-column>
-            <el-table-column prop="class" label="样式" width="100">
-            </el-table-column>
             <el-table-column prop="rank" label="排序权重" width="100">
             </el-table-column>
             <el-table-column prop="status" label="状态" width="80">
             </el-table-column>
             <el-table-column prop="admin.name" label="操作员" width="120">
             </el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="120">
+            <el-table-column prop="roles.name" label="权限" width="220">
             </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="120">
+            <el-table-column prop="create_time" label="创建时间" width="150">
+            </el-table-column>
+            <el-table-column prop="update_time" label="更新时间" width="150">
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
@@ -58,7 +56,7 @@
     export default {
         data() {
             return {
-                dataUrl: '/menu/index',
+                dataUrl: '/role/index',
                 tableData: [],
                 cur_page: 1,
                 multipleSelection: [],
@@ -74,8 +72,9 @@
         computed: {
             data(){
                 const self = this;
-                return self.tableData.filter(function(d){
-                    /*let is_del = false;
+                return this.tableData;
+                /*return self.tableData.filter(function(d){
+                    let is_del = false;
                     for (let i = 0; i < self.del_list.length; i++) {
                         if(d.name === self.del_list[i].name){
                             is_del = true;
@@ -89,9 +88,9 @@
                         ){
                             return d;
                         }
-                    }*/
+                    }
                     return d;
-                })
+                })*/
             }
         },
         methods: {
@@ -108,14 +107,13 @@
                     let res = response.data;
                     if(res.status) {
                         let data = res.data;
-                        console.log(data.menu);
-                        self.tableData = data.menu;
+                        self.tableData = data.roles;
                     }
                 }).catch(function(response) {
                 });
             },
             add() {
-                this.$router.push({ path: '/menu-add' });
+                this.$router.push({ path: '/role-add' });
             },
             search(){
                 //this.is_search = true;
@@ -127,7 +125,8 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                //this.$message('编辑第'+(index+1)+'行');
+                let id = row.id;
+                this.$router.push({ path: '/role-edit', query: { role_id: id }});
             },
             handleDelete(index, row) {
                 //this.$message.error('删除第'+(index+1)+'行');
