@@ -134,6 +134,7 @@
         methods: {
             submit(formName) {
                 let url = this.postUrl;
+                let self = this;
                 let formData = this.menuData;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {

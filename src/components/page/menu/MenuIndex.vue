@@ -29,6 +29,17 @@
             </el-table-column>
             <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus">
             </el-table-column>
+            <el-table-column
+                label="对应角色"
+                width="200">
+                <template scope="scope">
+                    <el-tag
+                        v-for="role in scope.row.srole"
+                        type="primary">
+                    {{role.name}}
+                    </el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="admin.name" label="操作员" width="120">
             </el-table-column>
             <el-table-column prop="create_time" label="创建时间" width="150">
@@ -108,7 +119,6 @@
                     let res = response.data;
                     if(res.status) {
                         let data = res.data;
-                        console.log(data.menu);
                         self.tableData = data.menu;
                     }
                 }).catch(function(response) {

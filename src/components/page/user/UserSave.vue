@@ -127,12 +127,14 @@
         methods: {
             submit(formName) {
                 let url = this.postUrl;
+                let self = this;
                 let formData = this.userData;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$fetch.post(url, formData).then(function(response) {
                             let res = response.data;
                             if(res.status) {
+                                self.$router.push({ path: '/user-index' });
                             }
                         }).catch(function(response) {
                         });

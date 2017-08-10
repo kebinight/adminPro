@@ -29,7 +29,7 @@ export default {
     },
     created () {
         let url = 'http://pro-admin.cn/menu/getMenu';
-        //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/common/getMenuList';
+        //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/menu/getMenuList';
         let obj = this;
         this.$fetch.post(url).then(function(response) {
             let res = response.data;

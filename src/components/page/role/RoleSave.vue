@@ -128,6 +128,7 @@
         methods: {
             submit(formName) {
                 let url = this.postUrl;
+                let self = this;
                 let formData = this.formData;
                 delete formData.create_time;
                 delete formData.update_time;
