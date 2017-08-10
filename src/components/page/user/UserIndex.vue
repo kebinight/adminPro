@@ -19,21 +19,17 @@
         <el-table :data="data" border style="width: 100%" ref="menuTable"
             @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="name" label="菜单名称" width="150">
+            <el-table-column prop="nick" label="用户名称" width="150">
             </el-table-column>
-            <el-table-column prop="node" label="路由标志" width="160">
+            <el-table-column prop="truename" label="真实姓名" width="150">
             </el-table-column>
-            <el-table-column prop="class" label="样式" width="100">
+            <el-table-column prop="gender" label="性别" width="100" :formatter="formatGender">
             </el-table-column>
-            <el-table-column prop="rank" label="排序权重" width="100">
+            <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus">
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="80">
+            <el-table-column prop="create_time" label="创建时间" width="150">
             </el-table-column>
-            <el-table-column prop="admin.name" label="操作员" width="120">
-            </el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="120">
-            </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="120">
+            <el-table-column prop="update_time" label="更新时间" width="150">
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
@@ -58,7 +54,7 @@
     export default {
         data() {
             return {
-                dataUrl: '/menu/index',
+                dataUrl: '/user/index',
                 tableData: [],
                 cur_page: 1,
                 multipleSelection: [],
@@ -108,14 +104,13 @@
                     let res = response.data;
                     if(res.status) {
                         let data = res.data;
-                        console.log(data.menu);
-                        self.tableData = data.menu;
+                        self.tableData = data.users;
                     }
                 }).catch(function(response) {
                 });
             },
             add() {
-                this.$router.push({ path: '/menu-add' });
+                this.$router.push({ path: '/user-add' });
             },
             search(){
                 //this.is_search = true;
@@ -127,7 +122,8 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                //this.$message('编辑第'+(index+1)+'行');
+                let id = row.id;
+                this.$router.push({ path: '/user-edit', query: { user_id: id }});
             },
             handleDelete(index, row) {
                 //this.$message.error('删除第'+(index+1)+'行');
@@ -145,6 +141,22 @@
             },
             handleSelectionChange(val) {
                 //this.multipleSelection = val;
+            },
+            formatGender(row, column, cellValue) {
+                switch(parseInt(row.gender)) {
+                    case 1:
+                        return '男';
+                    case 2:
+                        return '女';
+                }
+            },
+            formatStatus(row, column, cellValue) {
+               switch(parseInt(row.status   )) {
+                    case 1:
+                        return '启用';
+                    case 0:
+                        return '禁用';
+                }
             }
         }
     }

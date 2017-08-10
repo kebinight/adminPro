@@ -16,9 +16,13 @@
                             <el-input v-model="menuData.name"></el-input>
                         </el-form-item>
                         <el-form-item label="所属上级" prop="pid">
-                            <el-select v-model="menuData.pid" placeholder="请选择菜单所属上级">
-                                <el-option label="根级菜单" value="0" select></el-option>
-                                <el-option label="菜单管理" value="1"></el-option>
+                            <el-select v-model="menuData.parent_id" placeholder="请选择菜单所属上级">
+                                <el-option
+                                    v-for="item in rootMenu"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="路由标识" prop="node">
@@ -34,9 +38,9 @@
                         <el-form-item label="菜单权限">
                             <el-transfer
                                 v-model="menuData.srole._ids"
-                                :props="{ key: 'value', label: 'desc' }"
-                                :data="rolePicker.restData"
-                                :titles="rolePicker.title">
+                                :props="{ key: 'id', label: 'name' }"
+                                :data="picker.allData"
+                                :titles="picker.title">
                             </el-transfer>
                         </el-form-item>
                         <el-form-item label="备注说明" prop="remark">
@@ -58,43 +62,64 @@
     export default {
         created() {
             let path = this.$route.path;
+            let self = this;
             if(path == '/menu-add') {
                 this.pageTitle = '添加菜单';
-            } else if(path == '/menu-eidt') {
+            } else if(path == '/menu-edit') {
                 this.pageTitle = '编辑菜单';
             }
+
+            let menu_id = this.$route.query.menu_id;
+            let postData = menu_id ? { id: menu_id } : {};
+            let url = this.initUrl;
+            this.$fetch.post(url, postData).then(function(response) {
+                let res = response.data;
+                if(res.status) {
+                    let data = res.data;
+                    let menu = data.menu;
+                    let roles_selected = []; //被选中的权限
+                    if(menu) {
+                        menu.status = menu.status.toString();
+                        menu.srole.forEach(function(e) {
+                            roles_selected.push(e.id);
+                        });
+                        menu.srole = { _ids: roles_selected };
+                        delete menu.create_time;
+                        delete menu.update_time;
+                        self.menuData = menu;
+                    }
+
+                    self.picker.allData = data.roles;
+                    self.rootMenu = self.rootMenu.concat(data.rootMenus);
+                }
+            }).catch(function(response) {
+                //do something
+            });
         },
         data() {
-            const generateData3 = _ => {
-                const data = [];
-                for (let i = 1; i <= 8; i++) {
-                    data.push({
-                        value: i,
-                        desc: `角色 ${ i }`
-                    });
-                }
-                return data;
-            };
             return {
                 pageTitle: '',
+                initUrl: '/menu/saveIndex',
                 postUrl: '/menu/save',
                 menuData: {
-                    id: '',
                     name: '',
-                    pid: '0',
+                    parent_id: 0,
                     class: '',
                     node: '',
                     rank: 0,
                     status: '1',
                     srole: {
-                        _ids: [1, 2, 3]
+                        _ids: []
                     },
                     remark: ''
                 },
-                rolePicker: {
+                picker: {
                     title: ['待选角色', '已选中角色'],
-                    restData: generateData3()
+                    allData: []
                 },
+                rootMenu: [
+                    { id: 0, name: '根级菜单' }
+                ],
                 rules: {
                     name: [
                         { required: true, message: '请输入菜单名称', trigger: 'blur' },

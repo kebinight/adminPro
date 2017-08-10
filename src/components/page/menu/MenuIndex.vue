@@ -27,13 +27,13 @@
             </el-table-column>
             <el-table-column prop="rank" label="排序权重" width="100">
             </el-table-column>
-            <el-table-column prop="status" label="状态" width="80">
+            <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus">
             </el-table-column>
             <el-table-column prop="admin.name" label="操作员" width="120">
             </el-table-column>
-            <el-table-column prop="create_time" label="创建时间" width="120">
+            <el-table-column prop="create_time" label="创建时间" width="150">
             </el-table-column>
-            <el-table-column prop="update_time" label="更新时间" width="120">
+            <el-table-column prop="update_time" label="更新时间" width="150">
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
@@ -127,7 +127,8 @@
                 return row.tag === value;
             },
             handleEdit(index, row) {
-                //this.$message('编辑第'+(index+1)+'行');
+                let id = row.id;
+                this.$router.push({ path: '/menu-edit', query: { menu_id: id }});
             },
             handleDelete(index, row) {
                 //this.$message.error('删除第'+(index+1)+'行');
@@ -145,6 +146,14 @@
             },
             handleSelectionChange(val) {
                 //this.multipleSelection = val;
+            },
+            formatStatus(row, column, cellValue) {
+               switch(parseInt(row.status   )) {
+                    case 1:
+                        return '启用';
+                    case 0:
+                        return '禁用';
+                }
             }
         }
     }

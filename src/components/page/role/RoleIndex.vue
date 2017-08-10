@@ -19,7 +19,7 @@
         <el-table :data="data" border style="width: 100%" ref="menuTable"
             @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column prop="name" label="菜单名称" width="150">
+            <el-table-column prop="name" label="角色名称" width="150">
             </el-table-column>
             <el-table-column prop="rank" label="排序权重" width="100">
             </el-table-column>
@@ -27,7 +27,15 @@
             </el-table-column>
             <el-table-column prop="admin.name" label="操作员" width="120">
             </el-table-column>
-            <el-table-column prop="roles.name" label="权限" width="220">
+            <el-table-column label="权限" width="220">
+                <template scope="scope">
+                    <el-tag
+                        v-for="limit in scope.row.slimit"
+                        type="primary"
+                        @close="handleCloseTag(scope.row, limit)">
+                    {{limit.name}}
+                    </el-tag>
+                </template>
             </el-table-column>
             <el-table-column prop="create_time" label="创建时间" width="150">
             </el-table-column>

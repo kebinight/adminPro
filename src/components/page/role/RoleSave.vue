@@ -54,31 +54,47 @@
                 this.pageTitle = '添加角色';
             } else if(path == '/role-edit') {
                 this.pageTitle = '编辑角色';
-                let role_id = this.$route.query.role_id;
-                let url = this.initUrl;
-                this.$fetch.post(url, { 
-                    id: role_id
-                }).then(function(response) {
+            }
+
+            let role_id = this.$route.query.role_id;
+            let postData = role_id ? { id: role_id } : {};
+            let url = this.initUrl;
+                this.$fetch.post(url, postData).then(function(response) {
                     let res = response.data;
                     if(res.status) {
                         let data = res.data;
                         let role = data.role;
                         let limits = data.limits;
-                        let limit_selected = [];
-                        role.slimit = limits;
-                        role.status = role.status.toString();
-                        role.slimit.forEach(function(e) {
-                            limit_selected.push(e.id);
+                        let limit_selected = []; //被选中的权限
+                        let limits_sort = [];   //全部权限
+                        limits.forEach(function(e) {
+                            let children = e.children;
+                            let parent_name = e.name;
+                            delete e.children;
+                            e.name = e.name + ' - 菜单显示';
+                            limits_sort.push(e);
+                            if(children.length) {
+                                children.forEach(function(ce) {
+                                    ce.name = parent_name + ' - ' + ce.name;
+                                    limits_sort.push(ce);
+                                });
+                            }
                         });
-                        role.slimit = { _ids: limit_selected };
 
-                        self.formData = role;
-                        self.picker.allData = limits;
+                        if(role) {
+                            role.status = role.status.toString();
+                            role.slimit.forEach(function(e) {
+                                limit_selected.push(e.id);
+                            });
+                            role.slimit = { _ids: limit_selected };
+                            self.formData = role;
+                        }
+
+                        self.picker.allData = limits_sort;
                     }
                 }).catch(function(response) {
                     //do something
                 });
-            }
         },
         data() {
             return {
@@ -113,6 +129,8 @@
             submit(formName) {
                 let url = this.postUrl;
                 let formData = this.formData;
+                delete formData.create_time;
+                delete formData.update_time;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.$fetch.post(url, formData).then(function(response) {
