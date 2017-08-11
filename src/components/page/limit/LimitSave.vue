@@ -29,7 +29,7 @@
                             <el-input type="textarea" v-model="limitData.remark"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submit('limitForm')">立即创建</el-button>
+                            <el-button type="primary" @click="submit('limitForm')">提交</el-button>
                             <el-button @click="resetForm('limitForm')">重置</el-button>
                         </el-form-item>
                     </el-form>
@@ -44,15 +44,38 @@
     export default {
         created() {
             let path = this.$route.path;
+            let self = this;
             if(path == '/limit-add') {
                 this.pageTitle = '添加权限';
-            } else if(path == '/limit-eidt') {
+            } else if(path == '/limit-edit') {
                 this.pageTitle = '编辑权限';
             }
+
+            let limit_id = this.$route.query.limit_id;
+            let postData = limit_id ? { id: limit_id } : {};
+            let url = this.initUrl;
+            this.$fetch.post(url, postData).then(function(response) {
+                let res = response.data;
+                if(res.status) {
+                    console.log(res);
+                    let data = res.data;
+                    let slimit = data.slimit;
+                    let roles_selected = []; //被选中的权限
+                    if(slimit) {
+                        slimit.status = slimit.status.toString();
+                        delete slimit.create_time;
+                        delete slimit.update_time;
+                        self.limitData = slimit;
+                    }
+                }
+            }).catch(function(response) {
+                //do something
+            });
         },
         data() {
             return {
                 pageTitle: '',
+                initUrl: '/slimit/saveIndex',
                 postUrl: '/slimit/save',
                 limitData: {
                     name: '',

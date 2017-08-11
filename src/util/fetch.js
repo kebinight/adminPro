@@ -27,48 +27,31 @@ service.interceptors.request.use(config => {
 // 添加一个响应拦截器
 service.interceptors.response.use(response => {
     let data = response.data;
+    let msgType = 'success';
     switch (data.code) {
         case 200 :
-            if(data.msg) {
-                if(data.status) {
-                    Message({
-                        showClose: true,
-                        message: data.msg,
-                        type: 'success'
-                    });
-                } else {
-                    Message({
-                        showClose: true,
-                        message: data.msg,
-                        type: 'error'
-                    });
-                }
-            }
             break;
         case 201 :  //注册步骤未完成
         case 202 :  //账号被限制登录
         case 203 :  //未注册的账号
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: 'error'
-            });
+            msgType = 'error';
             break;
         case 403 :
-            Message({
-                showClose: true,
-                message: '请先登录',
-                type: 'warning'
-            });
+            msgType = 'warning';
             router.replace({ path: '/login' });
             break;
         default :
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: 'error'
-            });
+            msgType = 'error';
             break;
+    }
+
+    //提示消息弹窗
+    if(data.msg) {
+        Message({
+            showClose: true,
+            message: data.msg,
+            type: msgType
+        });
     }
     return response;
 }, error => {

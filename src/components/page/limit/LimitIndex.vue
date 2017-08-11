@@ -10,8 +10,8 @@
             <el-input placeholder="输入关键字进行筛选" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
             <el-button type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
-            <el-button type="danger" icon="delete" class="handle-del mr10" @click="">批量删除</el-button>
         </div>
+
         <el-table
             :data="limitData"
             style="width: 100%">
@@ -28,7 +28,8 @@
             <el-table-column
                 prop="status"
                 label="状态"
-                width="80">
+                width="80"
+                :formatter="formatStatus">
             </el-table-column>
             <el-table-column
                 prop="create_time"  
@@ -45,12 +46,12 @@
                 width="300">
                 <template scope="scope">
                     <el-tag
-                        v-for="action in scope.row.children"
+                        v-for="value in scope.row.children"
                         type="primary"
                         :closable="true"
                         :close-transition="false"
-                        @close="handleCloseTag(scope.row, action)">
-                    {{action.name}}
+                        @close="handleDeleteOne(value, scope.row)">
+                    {{value.name}}
                     </el-tag>
                     <el-button size="small" @click="showAddTag(scope.row)">+添加动作</el-button>
                 </template>
@@ -64,10 +65,22 @@
                     <el-button
                         size="small"
                         type="danger"
-                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                        @click="handleDeleteOne(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <!-- 分页 -->
+        <div class="pagination">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pager.curent_page"
+                :page-sizes="pager.page_sizes"
+                :page-size="pager.page_size"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="pager.item_total">
+            </el-pagination>
+        </div>
 
         <el-dialog title="添加权限动作" :visible.sync="dialogFormVisible" size="tiny">
             <el-form :model="actionItem" ref="limitForm" :rules="rules">
@@ -94,11 +107,17 @@
 </template>
 
 <script>
+    //import vPtable from './components/common/TableWithPager'
+
     export default {
+        /*components:{
+            vPtable
+        },*/
         data() {
             return {
                 dataUrl: '/slimit/index',
                 addActionUrl: '/slimit/save',
+                deleteUrl: '/slimit/delete',
                 limitData: [],
                 dialogFormVisible: false,
                 curentOpeLimitIndex: null,  //当前正在操作的权限项
@@ -117,7 +136,19 @@
                     node: [
                         { required: true, message: '请输入action', trigger: 'blur' }      
                     ]
+                },
+                pager: {
+                    curent_page: 1,
+                    item_total: 0,
+                    page_size: 1,
+                    page_sizes: [1, 2, 4, 8, 10]
                 }
+            }
+        },
+        watch: {
+            //表格数据发生变化时触发分页插件改变
+            limitData: function (newlimitData) {
+                this.pager.item_total = newlimitData.length;
             }
         },
         created(){
@@ -136,17 +167,6 @@
                         self.limitData = data.limits;
                     }
                 }).catch(function(response) {
-                    //do something
-                });
-            },
-            handleCloseTag(limit, action) {
-                this.$confirm('确定删除该动作, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    limit.children.splice(limit.children.indexOf(action), 1);
-                }).catch(() => {
                     //do something
                 });
             },
@@ -186,6 +206,34 @@
             add() {
                 this.$router.push({ path: '/limit-add' });
             },
+            handleEdit(index, row) {
+                let id = row.id;
+                this.$router.push({ path: '/limit-edit', query: { limit_id: id }});
+            },
+            handleDeleteOne(item, limit=null) {
+                let self = this;
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let url = self.deleteUrl;
+                    let postData = { id: item.id };
+                    self.$fetch.post(url, postData).then(function(response) {
+                        let res = response.data;
+                        if(res.status) {
+                            if(item.parent_id != 0) {
+                                limit.children.splice(limit.children.indexOf(item), 1);
+                            } else {
+                                self.limitData.splice(self.limitData.indexOf(item), 1);
+                            }
+                        }
+                    }).catch(function(response) {
+                    });
+                }).catch(() => {
+                    //do something
+                });
+            },
             search() {
 
             },
@@ -196,6 +244,24 @@
                 }
                 this.inputVisible = false;
                 this.inputValue = '';
+            },
+            formatStatus(row, column, cellValue) {
+               switch(parseInt(row.status   )) {
+                    case 1:
+                        return '启用';
+                    case 0:
+                        return '禁用';
+                }
+            },
+            /*updatePage() {
+                this.pager.item_total = this.limitData.length;
+                console.log(this.limitData.length);
+            },*/
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
             }
         }
     }

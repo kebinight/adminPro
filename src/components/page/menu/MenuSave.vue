@@ -47,7 +47,7 @@
                             <el-input type="textarea" v-model="menuData.remark"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submit('menuForm')">立即创建</el-button>
+                            <el-button type="primary" @click="submit('menuForm')">提交</el-button>
                             <el-button @click="resetForm('menuForm')">重置</el-button>
                         </el-form-item>
                     </el-form>

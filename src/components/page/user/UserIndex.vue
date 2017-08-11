@@ -7,14 +7,9 @@
             </el-breadcrumb>
         </div>
         <div class="handle-box">
-            <el-select v-model="select_cate" placeholder="筛选省份" class="handle-select mr10">
-                <el-option key="1" label="广东省" value="广东省"></el-option>
-                <el-option key="2" label="湖南省" value="湖南省"></el-option>
-            </el-select>
             <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
             <el-button type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
-            <el-button type="danger" icon="delete" class="handle-del mr10" @click="">批量删除</el-button>
         </div>
         <el-table :data="data" border style="width: 100%" ref="menuTable"
             @selection-change="handleSelectionChange">
@@ -27,6 +22,17 @@
             </el-table-column>
             <el-table-column prop="status" label="状态" width="80" :formatter="formatStatus">
             </el-table-column>
+            <el-table-column
+                label="对应角色"
+                width="200">
+                <template scope="scope">
+                    <el-tag
+                        v-for="role in scope.row.srole"
+                        type="primary">
+                    {{role.name}}
+                    </el-tag>
+                </template>
+            </el-table-column>
             <el-table-column prop="create_time" label="创建时间" width="150">
             </el-table-column>
             <el-table-column prop="update_time" label="更新时间" width="150">
@@ -36,7 +42,7 @@
                     <el-button size="small"
                             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     <el-button size="small" type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                            @click="handleDeleteOne(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -55,6 +61,7 @@
         data() {
             return {
                 dataUrl: '/user/index',
+                deleteUrl: '/user/delete',
                 tableData: [],
                 cur_page: 1,
                 multipleSelection: [],
@@ -125,19 +132,25 @@
                 let id = row.id;
                 this.$router.push({ path: '/user-edit', query: { user_id: id }});
             },
-            handleDelete(index, row) {
-                //this.$message.error('删除第'+(index+1)+'行');
-            },
-            delAll(){
-                /*const self = this,
-                    length = self.multipleSelection.length;
-                let str = '';
-                self.del_list = self.del_list.concat(self.multipleSelection);
-                for (let i = 0; i < length; i++) {
-                    str += self.multipleSelection[i].name + ' ';
-                }
-                self.$message.error('删除了'+str);
-                self.multipleSelection = [];*/
+            handleDeleteOne(item) {
+                let self = this;
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let url = self.deleteUrl;
+                    let postData = { id: item.id };
+                    self.$fetch.post(url, postData).then(function(response) {
+                        let res = response.data;
+                        if(res.status) {
+                            self.tableData.splice(self.tableData.indexOf(item), 1);
+                        }
+                    }).catch(function(response) {
+                    });
+                }).catch(() => {
+                    //do something
+                });
             },
             handleSelectionChange(val) {
                 //this.multipleSelection = val;
