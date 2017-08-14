@@ -32,7 +32,7 @@
             handleCommand(command) {
                 if(command == 'loginout'){
                     localStorage.removeItem('ms_username');
-                    localStorage.removeItem('isLogin');
+                    this.$uitls.setCookie('isLogin', false);
                     this.$router.push('/login');
                 } else if(command == 'update-info') {
                     alert('点击了修改个人资料');

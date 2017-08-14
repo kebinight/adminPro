@@ -5,16 +5,17 @@
 import axios from 'axios';
 import router from '../router/index';
 import { Message } from 'element-ui';
+import utils from './utils';
 
-//axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true
+
 const service = axios.create({
-    baseURL: (process.env.NODE_ENV === 'development') ? 'http://localhost:8080/api/' : 'http://pro-admin.cn',
+    baseURL: (process.env.NODE_ENV === 'development') ? 'http://pro-admin.cn' : 'http://pro-admin.cn',
     timeout: 15000,
 
     header: {
         'contentType': 'application/x-www-form-urlencoded; charset=UTF-8',
         //'Access-Control-Allow-Origin': '*',
-        'User-Agent' : 'smartlemon'
     }
 });
 
@@ -32,6 +33,7 @@ service.interceptors.response.use(response => {
     let msgType = 'success';
     switch (data.code) {
         case 200 :
+            if(!data.status) msgType = 'error';
             break;
         case 201 :  //注册步骤未完成
         case 202 :  //账号被限制登录
@@ -40,6 +42,7 @@ service.interceptors.response.use(response => {
             break;
         case 403 :
             msgType = 'warning';
+            utils.setCookie('isLogin', false);
             router.replace({ path: '/login' });
             break;
         default :

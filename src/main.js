@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import { Message } from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
 import "babel-polyfill";
+import utils from './util/utils'
 
 //定义全局常量
 
@@ -13,6 +14,7 @@ import "babel-polyfill";
 Vue.use(ElementUI);
 Vue.prototype.$fetch = fetch;
 Vue.prototype.$message = Message;
+Vue.prototype.$utils = utils;
 
 new Vue({
     router,

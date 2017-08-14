@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { Message } from 'element-ui';
+import utils from '../util/utils';
 
 Vue.use(Router);
 let router = new Router({
@@ -16,7 +17,7 @@ let router = new Router({
             children:[
                 {
                     path: '/',
-                    component: resolve => require(['../components/page/Readme.vue'], resolve)
+                    component: resolve => require(['../components/page/menu/MenuIndex.vue'], resolve)
                 },
                 //菜单管理---------------------------------------------------------------------------------
                 {
@@ -83,15 +84,11 @@ router.beforeEach((to, from, next) => {
     if(to.path == '/login') {
         next();
     } else {
-        if(localStorage.getItem('isLogin')) {
+        let isLogin = utils.getCookie('isLogin');
+        if(isLogin) {
             next();
         } else {
-            Message({
-                showClose: true,
-                message: '请先登录',
-                type: 'warning'
-            });
-            next({ path: '/login' });
+            next('/login');
         }
     }
 
