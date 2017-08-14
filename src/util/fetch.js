@@ -6,13 +6,15 @@ import axios from 'axios';
 import router from '../router/index';
 import { Message } from 'element-ui';
 
+//axios.defaults.withCredentials = true
 const service = axios.create({
-    baseURL: (process.env.NODE_ENV === 'development') ? 'http://pro-admin.cn' : 'http://pro-admin.cn',
+    baseURL: (process.env.NODE_ENV === 'development') ? 'http://localhost:8080/api/' : 'http://pro-admin.cn',
     timeout: 15000,
+
     header: {
         'contentType': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
-        'User-Agent' : 'smartlemon' 
+        //'Access-Control-Allow-Origin': '*',
+        'User-Agent' : 'smartlemon'
     }
 });
 
@@ -60,3 +62,4 @@ service.interceptors.response.use(response => {
 });
 
 export default service;
+

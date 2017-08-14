@@ -29,7 +29,8 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api':{
-                target:'http://jsonplaceholder.typicode.com',
+                target:'http://pro-admin.cn',
+                //target:'http://jsonplaceholder.typicode.com',
                 changeOrigin:true,
                 pathRewrite:{
                     '/api':''

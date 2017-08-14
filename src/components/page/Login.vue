@@ -43,6 +43,8 @@
                 let account = this.ruleForm.username;
                 let password = this.ruleForm.password;
                 let postData = { account: account, pwd: password };
+                document.cookie="hello=helloworld";
+                console.log(document.cookie.match('hello'));
                 self.$fetch.post(url, postData).then(function(response) {
                     let res = response.data;
                     if(res.status) {
