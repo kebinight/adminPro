@@ -6,7 +6,6 @@ import axios from 'axios';
 import router from '../router/index';
 import { Message } from 'element-ui';
 import utils from './utils';
-import sidebar from '../components/common/Sidebar.vue';
 
 axios.defaults.withCredentials = true
 
@@ -36,7 +35,6 @@ service.interceptors.response.use(response => {
         case 200 :
             if(!data.status) msgType = 'error';
             if(data.data.reload) {
-                console.log(sidebar);
             }
             break;
         case 201 :  //注册步骤未完成
@@ -48,6 +46,8 @@ service.interceptors.response.use(response => {
             msgType = 'warning';
             utils.setCookie('isLogin', false);
             router.replace({ path: '/login' });
+            break;
+        case 10301: //无访问权限
             break;
         default :
             msgType = 'error';

@@ -4,8 +4,8 @@
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
-                    <img class="user-logo" src="../../../static/img/img.jpg">
-                    {{username}}
+                    <img class="user-logo" :src="user_info.avatar">
+                    {{ user_info.name }}
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="update-info">个人信息</el-dropdown-item>
@@ -18,22 +18,32 @@
 <script>
     export default {
         data() {
+            let user_info = this.$utils.getCookie('user_info');
+            user_info = JSON.parse(user_info);
             return {
-                name: ''
+                user_info: {
+                    name: user_info.name,
+                    avatar: user_info.avatar
+                }
             }
         },
         computed:{
-            username(){
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
-            }
         },
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username');
-                    this.$uitls.setCookie('isLogin', false);
-                    this.$router.push('/login');
+                    let url = '/userc/logout';
+                    let obj = this;
+                    this.$fetch.post(url).then(function(response) {
+                        let res = response.data;
+                        if(res.status) {
+                            obj.$utils.setCookie('isLogin', 0);
+                            obj.$utils.setCookie('user_info', '');
+                            obj.$router.push('/login');
+                        }
+                    }).catch(function(response) {
+                        //do something
+                    });
                 } else if(command == 'update-info') {
                     alert('点击了修改个人资料');
                 }

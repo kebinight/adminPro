@@ -48,6 +48,7 @@
                     if(res.status) {
                         let data = res.data;
                         let userinfo = data.userinfo;
+                        self.$utils.setCookie('user_info', JSON.stringify(userinfo));
                         self.$router.push(data.cb);
                     }
                 }).catch(function(response) {
