@@ -28,22 +28,27 @@ export default {
         }
     },
     created () {
-        let url = '/menu/getMenu';
-        //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/menu/getMenuList';
-        let obj = this;
-        this.$fetch.post(url).then(function(response) {
-            let res = response.data;
-            if(res.status) {
-                let data = res.data;
-                obj.items = data.menu;
-            }
-        }).catch(function(response) {
-        });
+        this.getMenus();
     },
     computed:{
         //返回当前活动的菜单项名
         onRoutes(){
             return this.$route.path.replace('/', '');
+        }
+    },
+    methods: {
+        getMenus: function() {
+            let url = '/menu/getMenu';
+            //let url = 'http://www.easy-mock.com/mock/59770dbca1d30433d83d0f6a/adminpro/menu/getMenuList';
+            let obj = this;
+            this.$fetch.post(url).then(function(response) {
+                let res = response.data;
+                if(res.status) {
+                    let data = res.data;
+                    obj.items = data.menu;
+                }
+            }).catch(function(response) {
+            });
         }
     }
 }

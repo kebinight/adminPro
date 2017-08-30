@@ -17,7 +17,7 @@ let router = new Router({
             children:[
                 {
                     path: '/',
-                    component: resolve => require(['../components/page/menu/MenuIndex.vue'], resolve)
+                    component: resolve => require(['../components/page/tips/Home.vue'], resolve)
                 },
                 //菜单管理---------------------------------------------------------------------------------
                 {
