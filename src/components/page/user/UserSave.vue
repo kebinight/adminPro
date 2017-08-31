@@ -34,6 +34,9 @@
                         <el-form-item label="是否启用" prop="status">
                             <el-switch on-text="启用" off-text="禁用" on-value="1" off-value="0" v-model="userData.status"></el-switch>
                         </el-form-item>
+                        <el-form-item label="超级管理员" prop="is_super">
+                            <el-switch on-text="是" off-text="否" on-value="1" off-value="0" v-model="userData.is_super"></el-switch>
+                        </el-form-item>
                         <el-form-item label="用户角色">
                             <el-transfer
                                 v-model="userData.srole._ids"
@@ -106,6 +109,7 @@
                     truename: '',
                     gender: '1',
                     status: '1',
+                    is_super: '0',
                     srole: {
                         _ids: []
                     }
