@@ -27,7 +27,7 @@
                     <el-tag
                         v-for="limit in scope.row.slimit"
                         type="primary">
-                    {{limit.name}}
+                    {{limit.name}} ({{limit.node}}) <span v-if="limit.parent_id == 0">+</span>
                     </el-tag>
                 </template>
             </el-table-column>

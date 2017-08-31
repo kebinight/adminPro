@@ -51,7 +51,7 @@
                         :closable="true"
                         :close-transition="false"
                         @close="handleDeleteOne(value, scope.row)">
-                    {{value.name}}
+                    {{value.name}}({{value.node}})
                     </el-tag>
                     <el-button size="small" @click="showAddTag(scope.row)">+添加动作</el-button>
                 </template>

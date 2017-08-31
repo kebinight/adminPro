@@ -48,6 +48,7 @@ service.interceptors.response.use(response => {
             router.replace({ path: '/login' });
             break;
         case 10301: //无访问权限
+            msgType = 'error';
             break;
         default :
             msgType = 'error';

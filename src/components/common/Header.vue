@@ -19,6 +19,7 @@
     export default {
         data() {
             let user_info = this.$utils.getCookie('user_info');
+            console.log(user_info);
             user_info = JSON.parse(user_info);
             return {
                 user_info: {
