@@ -8,6 +8,9 @@
         </div>
         <div class="handle-box">
             <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+            <el-tooltip class="item" effect="dark" content="管理某角色可展示的菜单，与权限没有关系" placement="bottom">
+                <el-button>帮助</el-button>
+            </el-tooltip>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
             <el-button type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
         </div>

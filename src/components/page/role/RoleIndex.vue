@@ -8,8 +8,11 @@
         </div>
         <div class="handle-box">
             <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
+            <el-tooltip class="item" effect="dark" content="设置角色对应的权限" placement="bottom">
+                <el-button>帮助</el-button>
+            </el-tooltip>
             <el-button type="primary" icon="search" @click="search">搜索</el-button>
-            <el-button type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
+            <el-button v-if="checkLimits('save')" type="success" icon="plus" class="handle-add mr10" @click="add">添加</el-button>
         </div>
         <el-table :data="data" border style="width: 100%" ref="menuTable"
             @selection-change="handleSelectionChange">
@@ -37,9 +40,9 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template scope="scope">
-                    <el-button size="small"
+                    <el-button size="small" v-if="checkLimits('save')"
                             @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button size="small" type="danger"
+                    <el-button size="small" type="danger" v-if="checkLimits('delete')"
                             @click="handleDeleteOne(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -66,7 +69,8 @@
                 select_cate: '',
                 select_word: '',
                 del_list: [],
-                is_search: false
+                is_search: false,
+                user_limits: []      //权限管理
             }
         },
         created(){
@@ -111,6 +115,7 @@
                     if(res.status) {
                         let data = res.data;
                         self.tableData = data.roles;
+                        self.user_limits = data.user_limits;
                     }
                 }).catch(function(response) {
                 });
@@ -161,6 +166,16 @@
             },
             handleSelectionChange(val) {
                 //this.multipleSelection = val;
+            },
+            //检查是否有权限
+            checkLimits(action_name) {
+                let has = false;
+                (this.user_limits).forEach(function(e) {
+                    if(e == action_name) {
+                        has =  true;
+                    }
+                });
+                return has;
             }
         }
     }

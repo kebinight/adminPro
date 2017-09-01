@@ -80,6 +80,7 @@
                     let roles_selected = []; //被选中的权限
                     if(user) {
                         user.status = user.status.toString();
+                        user.is_super = user.is_super.toString();
                         user.gender = user.gender.toString();
                         user.srole.forEach(function(e) {
                             roles_selected.push(e.id);

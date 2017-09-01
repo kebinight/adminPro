@@ -39,32 +39,28 @@
         methods: {
             submitForm(formName) {
                 let self = this;
-                let url = this.loginUrl;
-                let account = this.ruleForm.username;
-                let password = this.ruleForm.password;
-                let postData = { account: account, pwd: password };
-                self.$fetch.post(url, postData).then(function(response) {
-                    let res = response.data;
-                    if(res.status) {
-                        let data = res.data;
-                        let userinfo = data.userinfo;
-                        self.$utils.setCookie('user_info', JSON.stringify(userinfo));
-                        self.$router.push(data.cb);
-                    }
-                }).catch(function(response) {
-                    //do something
-                });
-                /*self.$refs[formName].validate((valid) => {
+                self.$refs[formName].validate((valid) => {
                     if (valid) {
-                        localStorage.setItem('ms_username',self.ruleForm.username);
-                        localStorage.setItem('isLogin', true);
-                        self.$router.push('/home');
-
+                        let url = self.loginUrl;
+                        let account = self.ruleForm.username;
+                        let password = self.ruleForm.password;
+                        let postData = { account: account, pwd: password };
+                        self.$fetch.post(url, postData).then(function(response) {
+                            let res = response.data;
+                            if(res.status) {
+                                let data = res.data;
+                                let userinfo = data.userinfo;
+                                self.$utils.setCookie('user_info', JSON.stringify(userinfo));
+                                self.$router.push(data.cb);
+                            }
+                        }).catch(function(response) {
+                            //do something
+                        });
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
-                });*/
+                });
             }
         }
     }
